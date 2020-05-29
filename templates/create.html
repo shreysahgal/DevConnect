@@ -1,0 +1,21 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+Create Post
+{% endblock %}
+
+{% block content %}
+<div class="container" style="width: 50%";>
+    <h3>create</h3>
+    <form method="POST" action="/create">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.kind) }}
+        {{ wtf.form_field(form.title) }}
+        {{ wtf.form_field(form.descrip) }}
+        <button class="btn btn-primary" type="submit">Create!</button>
+    </form>
+    <br>
+    <p><a href="/signup">Don't have an account? Sign up!</a></p>
+</div>
+{% endblock %}
