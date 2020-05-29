@@ -1,0 +1,13 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+view post
+{% endblock %}
+
+{% block content %}
+<div class="container" style="width: 50%">
+    <h3>{{ post.title}}</h3>
+    <h5>created by {{ post.author }} on {{ post.created.date }}</h5>
+    <p>{{ post.descrip }}</p>
+</div>
+{% endblock %}
