@@ -1,12 +1,11 @@
-{% extends "bootstrap/base.html" %}
+{% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}
 Login
 {% endblock %}
 
-{% block content %}
-<div class="container" style="width: 50%";>
+{% block page_content %}
     <h3>log in</h3>
     <form method="POST" action="/login">
         {{ form.hidden_tag() }}
@@ -17,5 +16,4 @@ Login
     </form>
     <br>
     <p><a href="/signup">Don't have an account? Sign up!</a></p>
-</div>
 {% endblock %}
