@@ -10,6 +10,15 @@
     <!--Draw post-->
     <div class="container" style="width:70%">
         <div class="row">
+            {% if post.kind == 'i' %}
+            <i>idea</i>
+            {% elif post.kind == 'qa' %}
+            <i>q/a</i>
+            {% elif post.kind == 'u' %}
+            <i>update</i>
+            {% endif %}
+        </div>
+        <div class="row">
             <a href="/post/{{ post.id }}"><h3 style="display: inline">{{ post.title }}</h3></a> by <a href="/user/{{post.author}}">{{ post.author }} </a>
         </div>
         <div class="row">
