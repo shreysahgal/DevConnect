@@ -1,31 +1,14 @@
-import time
-from flask_bcrypt import generate_password_hash
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-from peewee import *
 
-DATABASE = SqliteDatabase('social.db')
+db = SQLAlchemy()
 
-class User(UserMixin, Model):
-    username = CharField(unique=True)
-    email = CharField(unique=True)
-    password = CharField(max_length=30)
-    joined_at = DateTimeField(default=time.time())
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(15), unique=True)
+    email = db.Column(db.String(50), unique=True)
+    password = db.Column(db.String(80))
 
-    class Meta:
-        database = DATABASE
-        order_by = ('-join_at',)
-        
-    @classmethod
-    def create_user(cls, username, email, password):
-        try:
-            cls.create(
-                username = username,
-                email=email,
-                password=generate_password_hash(password))
-        except IntegrityError:
-            raise ValueError("User already exists.")
-    
-def initialize():
-    DATABASE.connect()
-    DATABASE.create_tables([User], safe=True)
-    DATABASE.close()
+
+if __name__ == '__main__':
+    user = User(email="email", username="username", password="password")
