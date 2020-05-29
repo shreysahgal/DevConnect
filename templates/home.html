@@ -8,11 +8,14 @@
 {% for post in posts %}
 <!-- <li> -->
     <!--Draw post-->
-    <div class="container">
-        <div class="row" style="display: inline">
-            <a href="/post/{{ post.id }}"><h3>{{ post.title }}</h3></a> by <a href="/user/{{post.author}}">{{ post.author }} </a>
+    <div class="container" style="width:70%">
+        <div class="row">
+            <a href="/post/{{ post.id }}"><h3 style="display: inline">{{ post.title }}</h3></a> by <a href="/user/{{post.author}}">{{ post.author }} </a>
         </div>
-        <p>{{ post.descrip }}</p>
+        <div class="row">
+            <p>{{ post.descrip }}</p>
+        </div>
+        <br>
     </div>
 <!-- </li> -->
 {% endfor %}
