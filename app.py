@@ -55,11 +55,6 @@ def home():
     posts = Post.query.order_by('created').limit(10) # get 10 most recent posts
     return render_template('home.html', posts=posts)
 
-@app.route('/dashboard', methods=['GET', 'POST'])
-@login_required
-def dashboard():
-    return render_template('dashboard.html')
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -69,7 +64,7 @@ def login():
         if user:
             if check_password_hash(user.password, form.password.data):
                 login_user(user, remember=form.remember.data)
-                return redirect('/dashboard')
+                return redirect('/home')
         return "wrong again bitch"
         # return "<p>%s</p><p>%s</p>" % (form.username.data, form.password.data)
     return render_template('login.html', form=form)
