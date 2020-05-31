@@ -20,3 +20,6 @@ class PostForm(FlaskForm):
     kind = RadioField('kind', choices = [('i','Idea'),('qa','Q&A'),('u', 'Update')], validators=[InputRequired()])
     title = StringField('title', validators=[InputRequired()])
     descrip = StringField('descrip', validators=[InputRequired(), Length(min=10, max=80)])
+
+class EditProfileForm(FlaskForm): 
+    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])

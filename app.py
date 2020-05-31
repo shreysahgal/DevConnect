@@ -1,11 +1,11 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from flask_wtf import FlaskForm
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 
-from forms import LoginForm, RegisterForm, PostForm
+from forms import LoginForm, RegisterForm, PostForm, EditProfileForm
 from models import User, Post, userdb, postdb
 from config import Config
 
@@ -103,7 +103,7 @@ def view_user(username):
     user = User.query.filter_by(username=username).first_or_404()
     if user:
         is_a = ' & '.join(decode_tags(user.tags))
-        return render_template('user.html', user=user, is_a=is_a)
+        return render_template('displayuser.html', user=user, is_a=is_a)
     return "user doesn't exist"
 
 @app.route('/post/<postid>')
@@ -134,5 +134,16 @@ def create_post():
         return "post created"
     return render_template('create.html', form=form)
 
+@app.route('/edit_profile', methods = ['GET', 'POST'])
+@login_required
+def edit_profile(): 
+    form = EditProfileForm()
+    if form.validate_on_submit(): 
+        current_user.username = form.username.data
+        userdb.session.commit() 
+        return redirect(url_for('edit_profile'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+    return render_template('edit_profile.html', form=form)
 if __name__ == '__main__':
     app.run(debug=True)
