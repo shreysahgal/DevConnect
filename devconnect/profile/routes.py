@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from flask_sqlalchemy import SQLAlchemy
 
 # from devconnect.profile.forms import EditProfileForm
-from devconnect.models import User, userdb
+from devconnect.models import User
 from devconnect.profile import bp
 from config import Config
 

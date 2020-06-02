@@ -8,7 +8,7 @@ from flask_login import login_required,login_user, logout_user, current_user
 from devconnect.auth import bp
 from devconnect.auth.forms import LoginForm, RegisterForm
 from devconnect.models import User
-from devconnect import userdb
+from devconnect import db
 from config import Config
 
 def encode_tags(p, d, e):
@@ -41,8 +41,8 @@ def signup():
             username = form.username.data,
             password = hashed_pass,
             tags = tagstr)
-        userdb.session.add(new_user)
-        userdb.session.commit()
+        db.session.add(new_user)
+        db.session.commit()
         return redirect('/login')
         # return  "<p>%s</p><p>%s</p><p>%s</p>" % (form.email.data, form.username.data, form.password.data)
     return render_template('signup.html', form=form)

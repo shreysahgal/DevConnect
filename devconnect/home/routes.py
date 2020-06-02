@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 
 from devconnect.home import bp
-from devconnect.models import Post, postdb
+from devconnect.models import Post
 from config import Config
 
 @bp.route('/')
