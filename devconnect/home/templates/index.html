@@ -5,8 +5,8 @@
 {% block content %}
 <h1 class="text-center">Home Page!!!!!</h1>
 <ul>
-{% for post in posts %}
-<!-- <li> -->
+    {% for post in posts %}
+    <!-- <li> -->
     <!--Draw post-->
     <div class="container" style="width:70%">
         <div class="row">
@@ -19,14 +19,16 @@
             {% endif %}
         </div>
         <div class="row">
-            <a href="/post/{{ post.id }}"><h3 style="display: inline">{{ post.title }}</h3></a> by <a href="/user/{{post.author}}">{{ post.author }} </a>
+            <a href="/post/{{ post.id }}">
+                <h3 style="display: inline">{{ post.title }}</h3>
+            </a> by <a href="/user/{{post.author}}">{{ post.author }} </a>
         </div>
         <div class="row">
             <p>{{ post.descrip }}</p>
         </div>
         <br>
     </div>
-<!-- </li> -->
-{% endfor %}
+    <!-- </li> -->
+    {% endfor %}
 </ul>
 {% endblock %}
