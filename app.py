@@ -103,7 +103,8 @@ def view_user(username):
     user = User.query.filter_by(username=username).first_or_404()
     if user:
         is_a = ' & '.join(decode_tags(user.tags))
-        return render_template('displayuser.html', user=user, is_a=is_a)
+        posts = postdb.session.query(Post).filter(Post.author == username)
+        return render_template('displayuser.html', user=user, is_a=is_a, posts=posts)
     return "user doesn't exist"
 
 @app.route('/post/<postid>')
