@@ -16,9 +16,9 @@ postdb.init_app(app)
 
 
 # comment out when not reinstantiating the databases
-# with app.app_context():
-#     userdb.create_all()
-#     postdb.create_all()
+with app.app_context():
+    userdb.create_all()
+    postdb.create_all()
 
 login_manager = LoginManager()
 login_manager.init_app(app)

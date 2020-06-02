@@ -7,7 +7,7 @@ from flask_login import login_required,login_user, logout_user, current_user
 
 from devconnect.auth import bp
 from devconnect.auth.forms import LoginForm, RegisterForm
-from devconnect.models import User, userdb
+from devconnect.models import User
 from devconnect import userdb
 from config import Config
 

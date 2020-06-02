@@ -1,6 +1,5 @@
 setup.py
 devconnect/__init__.py
-devconnect/config.py
 devconnect/forms.py
 devconnect/models.py
 devconnect.egg-info/PKG-INFO
