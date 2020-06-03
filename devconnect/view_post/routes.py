@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_required, login_user, logout_user, current_user
 
-from devconnect.models import Post, postdb
+from devconnect.models import Post
 from config import Config
 from devconnect.view_post import bp
 

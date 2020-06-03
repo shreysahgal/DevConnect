@@ -7,16 +7,26 @@ from flask_login import login_required,login_user, logout_user, current_user
 
 from devconnect.auth import bp
 from devconnect.auth.forms import LoginForm, RegisterForm
-from devconnect.models import User
-from devconnect import userdb
+from devconnect.models import User, Tag
+from devconnect import db
 from config import Config
 
-def encode_tags(p, d, e):
-    tagstr = 'P'*p + 'D'*d + 'E'*e
-    return tagstr
+def form_to_taglist(form):
+    taglist = list()
+    if form.programmer:
+        taglist.append(Tag.query.get(1))
+    if form.designer:
+        taglist.append(Tag.query.get(2))
+    if form.entrepreneur:
+        taglist.append(Tag.query.get(3))
+    return taglist
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
+
+    if current_user:
+        return redirect(url_for('home.index'))
+    
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -31,18 +41,26 @@ def login():
 
 @bp.route('/signup', methods=['GET', 'POST'])
 def signup():
+
+    if current_user:
+        return redirect(url_for('home.index'))
+
     form = RegisterForm()
 
     if form.validate_on_submit():
         hashed_pass = generate_password_hash(form.password.data, method="sha256")
-        tagstr = encode_tags(form.programmer.data, form.designer.data, form.entrepreneur.data)
+
+        # tagstr = encode_tags(form.programmer.data, form.designer.data, form.entrepreneur.data)
+        taglist = form_to_taglist(form)
         new_user = User(
             email = form.email.data,
             username = form.username.data,
             password = hashed_pass,
-            tags = tagstr)
-        userdb.session.add(new_user)
-        userdb.session.commit()
+            tags=taglist
+        )
+        db.session.add(new_user)
+        db.session.commit()
+
         return redirect('/login')
         # return  "<p>%s</p><p>%s</p><p>%s</p>" % (form.email.data, form.username.data, form.password.data)
     return render_template('signup.html', form=form)
