@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 
-from devconnect.models import User, Post, db
+from devconnect.models import User, Post, Tag, db
 from config import Config
 
 app = Flask(__name__)
@@ -14,9 +14,16 @@ db.init_app(app)
 
 
 # comment out when not reinstantiating the databases
-with app.app_context():
-    db.create_all()
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
+#     db.create_all()
+
+#     p = Tag(name='Programmer')
+#     d = Tag(name='Designer')
+#     e = Tag(name='Entrepreneur')
+
+#     db.session.add_all([p, d, e])
+#     db.session.commit()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
