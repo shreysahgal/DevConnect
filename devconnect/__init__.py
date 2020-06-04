@@ -4,7 +4,6 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
-
 from devconnect.models import User, Post, Tag, db
 from config import Config
 
@@ -29,6 +28,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 Bootstrap(app)
+
 
 from devconnect.auth import bp as auth_bp
 app.register_blueprint(auth_bp)

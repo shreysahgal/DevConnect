@@ -1,5 +1,9 @@
 {% extends "bootstrap/base.html" %}
 {% block title %}DevConnect{% endblock %}
+{% block head %}   
+{{ super() }}  
+<link rel="icon" type="image/png" href="http://example.com/myicon.png">
+{% endblock %}
 {% block navbar %}
 
 <div class="navbar navbar-inverse" role="navigation">

@@ -13,12 +13,12 @@ from config import Config
 @login_required
 def create_post():
     form = PostForm()
-
     if form.validate_on_submit():
         kind = form.kind.data
         author = current_user.username
         title = form.title.data
         descrip = form.descrip.data
+        print(descrip)
         new_post = Post(
             kind=kind,
             author=author,

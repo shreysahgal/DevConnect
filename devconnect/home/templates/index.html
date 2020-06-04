@@ -24,7 +24,8 @@
             </a> by <a href="/user/{{post.author}}">{{ post.author }} </a>
         </div>
         <div class="row">
-            <p>{{ post.descrip }}</p>
+            <p>{{ Markup(post.descrip) }}</p>
+
         </div>
         <br>
     </div>

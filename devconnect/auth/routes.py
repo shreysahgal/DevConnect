@@ -24,7 +24,7 @@ def form_to_taglist(form):
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
 
-    if current_user:
+    if current_user.is_authenticated:
         return redirect(url_for('home.index'))
     
     form = LoginForm()
@@ -41,8 +41,8 @@ def login():
 
 @bp.route('/signup', methods=['GET', 'POST'])
 def signup():
-
-    if current_user:
+    
+    if current_user.is_authenticated:
         return redirect(url_for('home.index'))
 
     form = RegisterForm()
