@@ -23,10 +23,6 @@ def form_to_taglist(form):
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-
-    if current_user:
-        return redirect(url_for('home.index'))
-    
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -41,10 +37,6 @@ def login():
 
 @bp.route('/signup', methods=['GET', 'POST'])
 def signup():
-
-    if current_user:
-        return redirect(url_for('home.index'))
-
     form = RegisterForm()
 
     if form.validate_on_submit():

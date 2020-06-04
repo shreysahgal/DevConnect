@@ -26,13 +26,11 @@ class Post(db.Model):
     title = db.Column(db.String(25))
     descrip = db.Column(db.String())
 
-
 class Tag(db.Model):
     __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     users = db.relationship('User', secondary=assoc_table, backref=db.backref('tags', lazy='dynamic'), lazy='dynamic')
-
 
 if __name__ == '__main__':
     user = User(email="email", username="username", password="password")
