@@ -38,7 +38,6 @@ def login():
 
 @bp.route('/signup', methods=['GET', 'POST'])
 def signup():
-
     form = RegisterForm()
 
     if form.validate_on_submit():

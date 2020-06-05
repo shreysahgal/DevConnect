@@ -5,8 +5,42 @@ Sign Up
 {% endblock %}
 
 {% block content %}
-<div class="container" style="width: 50%">
-    <h3>{{ user.username}}</h3>
-    <p>is a {{ is_a }}</p>
+<div class="row">
+    <div class="container" style="width: 50%">
+        <h3>{{ user.username}}</h3>
+        <p>is a {{ is_a }}</p>
+        <div class="row">
+            <p>
+                Posts:
+                {% for post in posts %}
+                <!--Draw post-->
+            <div class="row">
+                {% if post.kind == 'i' %}
+                <i>idea</i>
+                {% elif post.kind == 'qa' %}
+                <i>q/a</i>
+                {% elif post.kind == 'u' %}
+                <i>update</i>
+                {% endif %}
+            </div>
+            <div class="row">
+                <a href="/post/{{ post.id }}">
+                    <h3 style="display: inline">{{ post.title }}</h3>
+                </a> by <a href="/user/{{post.author}}">{{ post.author }} </a>
+            </div>
+            <div class="row">
+                <p>{{ post.descrip }}</p>
+            </div>
+            <br>
+            {% endfor %}
+            </p>
+        </div>
+    </div>
+    {% if edit: %}
+    <div class="column-12" style="width: 50%">
+        <a href="{{url_for('profile.edit_profile')}}"><button type="button" class="btn btn-primary">Edit Your
+                Profile</button></a>
+    </div>
 </div>
+{% endif %}
 {% endblock %}
