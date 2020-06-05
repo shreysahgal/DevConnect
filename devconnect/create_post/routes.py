@@ -16,12 +16,11 @@ def create_post():
 
     if form.validate_on_submit():
         kind = form.kind.data
-        author = current_user.username
         title = form.title.data
         descrip = form.descrip.data
         new_post = Post(
             kind=kind,
-            author=author,
+            author=current_user,
             title=title,
             descrip=descrip
         )

@@ -7,27 +7,58 @@ from flask_login import LoginManager, UserMixin, login_required, login_user, log
 
 from devconnect.models import User, Post, Tag, db
 from config import Config
+from devconnect.fake import users, posts, comments
+from sqlalchemy.exc import IntegrityError
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 
 
+def add_admin():
+    admin = User(
+        email = 'admin@gmail.com',
+        username = 'admin',
+        password = generate_password_hash('password', method='SHA256'),
+        tags = [t for t in Tag.query.all()]
+    )
+    db.session.add(admin)
+
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+
+def add_tags():
+    print('hi)')
+    p = Tag(name='Programmer')
+    d = Tag(name='Designer')
+    e = Tag(name='Entrepreneur')
+
+    try:
+        db.session.add_all([p, d, e])
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+
 # comment out when not reinstantiating the databases
-# with app.app_context():
-#     db.create_all()
-#     db.create_all()
+with app.app_context():
 
-#     p = Tag(name='Programmer')
-#     d = Tag(name='Designer')
-#     e = Tag(name='Entrepreneur')
+    db.create_all()
+    db.create_all()
+    
+    add_admin()
+    add_tags()
 
-#     db.session.add_all([p, d, e])
-#     db.session.commit()
+    users(50)
+    posts(50)
+    comments(50)
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'auth.login'
 Bootstrap(app)
 
 from devconnect.auth import bp as auth_bp

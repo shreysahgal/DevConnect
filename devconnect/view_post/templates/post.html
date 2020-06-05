@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}
 view post
@@ -6,8 +7,26 @@ view post
 
 {% block content %}
 <div class="container" style="width: 50%">
-    <h3>{{ post.title}}</h3>
-    <h5>created by {{ post.author }} on {{ post.created.date() }}</h5>
-    <p>{{ post.descrip }}</p>
+    <div class="body">
+        <h3>{{ post.title}}</h3>
+        <h5>created by {{ post.author.username }} on {{ post.created.date() }}</h5>
+        <p>{{ post.descrip }}</p>
+    </div>
+
+    <br><br>
+
+    <div class="comments">
+        {% for comment in post.comments %}
+            <p>{{ comment.author.username }}: {{ comment.body }}</p>
+        {% endfor %}
+    </div>
+
+    <br><br>
+
+    <form method="POST" action="/post/{{ post.id }}">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.body) }}
+        <button class="btn btn-primary" type="submit">comment</button>
+    </form>
 </div>
 {% endblock %}
