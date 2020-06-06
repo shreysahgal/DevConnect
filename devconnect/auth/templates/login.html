@@ -6,6 +6,15 @@ Login
 {% endblock %}
 
 {% block page_content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+
 <h3 class="reha">log in</h3>
 <form method="POST" action="/login">
     {{ form.hidden_tag() }}
