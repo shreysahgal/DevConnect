@@ -8,8 +8,6 @@ def users(count=20):
     i = 0
 
     while i < count:
-        print(i)
-        print(len(Tag.query.all()))
         tags = sample([t for t in Tag.query.all()], k=randint(1,3))
 
         u = User(
@@ -24,18 +22,15 @@ def users(count=20):
             db.session.commit()
             i += 1
         except IntegrityError:
-            print(':(')
             db.session.rollback()
 
 def posts(count=20):
     fake = Faker()
     user_count = User.query.count()
-    print(user_count)
-    print('\n\n\n\n\n')
 
     for i in range(count):
         u = User.query.get(randint(1, user_count-1))
-        kind = ['Idea', 'Q&A', 'Update'][randint(0,2)]
+        kind = ['i', 'qa', 'u'][randint(0,2)]
         title = ' '.join(fake.words())
         descrip = ' '.join(fake.sentences())
         p = Post(

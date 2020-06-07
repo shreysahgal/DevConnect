@@ -16,8 +16,8 @@ def view_user(username):
     user = User.query.filter_by(username=username).first_or_404()
     if user:
         is_a = ' & '.join([t.name for t in user.tags])
-        posts = Post.query.filter(Post.author == username)   
-        isLoggedin = user.username == current_user.username
+        posts = Post.query.filter(Post.author == user)   
+        isLoggedin = user == current_user
         return render_template('displayuser.html', user=user, is_a=is_a, posts=posts, edit=isLoggedin)
     return "user doesn't exist"
 

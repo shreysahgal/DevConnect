@@ -26,7 +26,7 @@ Sign Up
             <div class="row">
                 <a href="/post/{{ post.id }}">
                     <h3 style="display: inline">{{ post.title }}</h3>
-                </a> by <a href="/user/{{post.author}}">{{ post.author }} </a>
+                </a> by <a href="/user/{{post.author}}">{{ post.author.username }} </a>
             </div>
             <div class="row">
                 <p>{{ post.descrip }}</p>
