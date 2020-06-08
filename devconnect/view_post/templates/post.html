@@ -5,6 +5,21 @@
 view post
 {% endblock %}
 
+{% block scripts %}
+{{ super() }}
+<script>
+    $(document).ready(function() {
+        $("button").click(function() {
+            id = $(this).attr('id');
+            replyid = "#reply"+id;
+            $(replyid).toggleClass("hidden");
+            $(this).toggleClass("hidden")
+            // $(this).replaceWith('<form method="POST" class="form-inline"><input type="text" id="textInput" value=' + id + '></form>');
+        });
+    });
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="container" style="width: 50%">
     <div class="body">
@@ -29,28 +44,50 @@ view post
                 <ul class="list-group">
                     <li class="list-group-item  flex-column" style="border: none;">
                         <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1"><a href="/user/{{ comment.author.username }}">{{ comment.author.username }}</a> <small class="text-muted">{{ comment.created.date() }}</small></h5>
+                            <h5 class="mb-1">
+                                <a href="/user/{{ comment.author.username }}">{{ comment.author.username }}</a>
+                                <small class="text-muted">{{ comment.created.date() }}</small>
+                            </h5>
                         </div>
                         <p class="mb-1">{{ comment.body }}</p>
+                        <div class="d-flex w-100 justify-content-between">
+                            <button class="btn btn-default mb-1 text-primary" id="{{ comment.id }}"><h7 class="mb-1">reply <span class="glyphicon glyphicon-comment"></span></h7></button>
+                            <div class="hidden" id="reply{{ comment.id }}">
+                                <form method="POST" class="form-inline">
+                                    <span style="display:none;">{{ replyform.parentid(value=comment.id) }}</span>
+                                    {{ wtf.form_field(replyform.body) }}
+                                    {{ wtf.form_field(replyform.submit) }}
+                                </form>
+                                
+                            </div>
+                        </div>
                     </li>
                     {% for subcomment in comment.children %}
                     <li class="list-group-item  flex-column" style="border: none; padding-left: 10%;">
                         <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1"><a href="/user/{{ comment.author.username }}">{{ subcomment.author.username }}</a> <small class="text-muted">{{ subcomment.created.date() }}</small></h5>
+                            <h5 class="mb-1">
+                                <a href="/user/{{ comment.author.username }}">
+                                    {{ subcomment.author.username }}
+                                </a>
+                                <small class="text-muted">
+                                    {{ subcomment.created.date() }}
+                                </small>
+                            </h5>
                         </div>
                         <p class="mb-1">{{ subcomment.body }}</p>
                     </li>
                     {% endfor %}
-                    <li class="list-group-item  flex-column" style="border: none; padding-left: 10%;">
-                        <form method="POST" class="form-inline">
-                            <span style="display:none;">{{ replyform.parentid(value=comment.id) }}</span>
-                            {{ wtf.form_field(replyform.body) }}
-                            {{ wtf.form_field(replyform.submit) }}
-                        </form>
-                    </li>
                 </ul>
             {% endif %}
         {% endfor %}
     </div>
 </div>
 {% endblock %}
+
+
+
+<!-- <form method="POST" class="form-inline">
+    <span style="display:none;">{{ replyform.parentid(value=comment.id) }}</span>
+    {{ wtf.form_field(replyform.body) }}
+    {{ wtf.form_field(replyform.submit) }}
+</form> -->
