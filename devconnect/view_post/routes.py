@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, Markup
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_required, login_user, logout_user, current_user
 
@@ -38,8 +38,7 @@ def view_post(postid):
         db.session.commit()
 
         return redirect('/post/'+postid)
-    
-
 
     post = Post.query.get(postid)
+    
     return render_template('post.html', post=post, commentform=commentform, replyform=replyform)

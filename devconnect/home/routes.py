@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, Markup
 
 from devconnect.home import bp
 from devconnect.models import Post, db, Comment, User

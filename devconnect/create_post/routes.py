@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, flash
 from flask_wtf import FlaskForm
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_required, current_user
@@ -25,6 +25,7 @@ def create_post():
             descrip=descrip
         )
         db.session.add(new_post)
-        db.session.commit()
+        db.session.commit() 
+        flash("post created")
         return redirect('/')
     return render_template('create.html', form=form)
