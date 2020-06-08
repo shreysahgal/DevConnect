@@ -23,7 +23,7 @@ view post
 
     <br><br>
 
-    <form method="POST" action="/post/{{ post.id }}">
+    <form method="POST" action="/post/{{post.id}}/{{ post.slug }}">
         {{ form.hidden_tag() }}
         {{ wtf.form_field(form.body) }}
         <button class="btn btn-primary" type="submit">comment</button>

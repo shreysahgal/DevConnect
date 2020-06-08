@@ -25,10 +25,10 @@
             <i>q/a</i>
             {% elif post.kind == 'u' %}
             <i>update</i>
-            {% endif %}
+            {% endif %} 
         </div>
         <div class="row">
-            <a href="/post/{{ post.id }}">
+            <a href="/post/{{post.id}}/{{ post.slug }}">
                 <h3 style="display: inline">{{ post.title }}</h3>
             </a> by <a href="/user/{{post.author.username}}">{{ post.author.username }} </a>
         </div>

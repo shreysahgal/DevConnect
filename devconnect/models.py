@@ -29,7 +29,7 @@ class Post(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     title = db.Column(db.String(25))
     descrip = db.Column(db.String())
-
+    slug = db.Column(db.String(25))
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
 
 class Comment(db.Model):

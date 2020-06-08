@@ -7,9 +7,9 @@ from config import Config
 from devconnect.view_post import bp
 from devconnect.view_post.forms import CommentForm
 
-@bp.route('/post/<postid>', methods=['GET', 'POST'])
+@bp.route('/post/<postid>/<slug>', methods=['GET', 'POST'])
 @login_required
-def view_post(postid):
+def view_post(postid,slug):
     form = CommentForm()
 
     if form.validate_on_submit():
@@ -22,7 +22,7 @@ def view_post(postid):
         db.session.add(new_comment)
         db.session.commit()
 
-        return redirect('/post/'+postid)
+        return redirect('/post/'+postid+"/"+slug)
 
     post = Post.query.get(postid)
     return render_template('post.html', post=post, form=form)
