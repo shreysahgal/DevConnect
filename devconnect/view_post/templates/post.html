@@ -12,21 +12,45 @@ view post
         <h5>created by {{ post.author.username }} on {{ post.created.date() }}</h5>
         <p>{{ post.descrip }}</p>
     </div>
-
     <br><br>
-
     <div class="comments">
+        <h4>Comments</h3>
+        <ul class="list-group">
+            <li class="list-group-item  flex-column" style="border: none;">
+                <form style="width:auto;" method="POST" action="/post/{{ post.id }}">
+                    {{ commentform.hidden_tag() }}
+                    {{ wtf.form_field(commentform.body) }}
+                    {{ wtf.form_field(commentform.submit) }}
+                </form>
+            </li>
+        </ul>
         {% for comment in post.comments %}
-            <p>{{ comment.author.username }}: {{ comment.body }}</p>
+            {% if comment.parent == None %}
+                <ul class="list-group">
+                    <li class="list-group-item  flex-column" style="border: none;">
+                        <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1"><a href="/user/{{ comment.author.username }}">{{ comment.author.username }}</a> <small class="text-muted">{{ comment.created.date() }}</small></h5>
+                        </div>
+                        <p class="mb-1">{{ comment.body }}</p>
+                    </li>
+                    {% for subcomment in comment.children %}
+                    <li class="list-group-item  flex-column" style="border: none; padding-left: 10%;">
+                        <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1"><a href="/user/{{ comment.author.username }}">{{ subcomment.author.username }}</a> <small class="text-muted">{{ subcomment.created.date() }}</small></h5>
+                        </div>
+                        <p class="mb-1">{{ subcomment.body }}</p>
+                    </li>
+                    {% endfor %}
+                    <li class="list-group-item  flex-column" style="border: none; padding-left: 10%;">
+                        <form method="POST" class="form-inline">
+                            <span style="display:none;">{{ replyform.parentid(value=comment.id) }}</span>
+                            {{ wtf.form_field(replyform.body) }}
+                            {{ wtf.form_field(replyform.submit) }}
+                        </form>
+                    </li>
+                </ul>
+            {% endif %}
         {% endfor %}
     </div>
-
-    <br><br>
-
-    <form method="POST" action="/post/{{ post.id }}">
-        {{ form.hidden_tag() }}
-        {{ wtf.form_field(form.body) }}
-        <button class="btn btn-primary" type="submit">comment</button>
-    </form>
 </div>
 {% endblock %}

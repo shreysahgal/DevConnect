@@ -5,16 +5,17 @@ from flask_login import login_required, login_user, logout_user, current_user
 from devconnect.models import Post, Comment, db
 from config import Config
 from devconnect.view_post import bp
-from devconnect.view_post.forms import CommentForm
+from devconnect.view_post.forms import CommentForm, ReplyForm
 
 @bp.route('/post/<postid>', methods=['GET', 'POST'])
 @login_required
 def view_post(postid):
-    form = CommentForm()
+    commentform = CommentForm()
+    replyform = ReplyForm()
 
-    if form.validate_on_submit():
+    if commentform.validate_on_submit():
         new_comment = Comment(
-            body=form.body.data,
+            body=commentform.body.data,
             author=current_user,
             post=Post.query.get(postid)
         )
@@ -24,5 +25,21 @@ def view_post(postid):
 
         return redirect('/post/'+postid)
 
+    if replyform.submit.data:
+        parent = Comment.query.get(replyform.parentid.data)
+        new_subcom = Comment(
+            body=replyform.body.data,
+            author=current_user,
+            post=Post.query.get(postid),
+            parent=parent
+        )
+
+        db.session.add(new_subcom)
+        db.session.commit()
+
+        return redirect('/post/'+postid)
+    
+
+
     post = Post.query.get(postid)
-    return render_template('post.html', post=post, form=form)
+    return render_template('post.html', post=post, commentform=commentform, replyform=replyform)
