@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, flash
 from flask_wtf import FlaskForm
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
@@ -31,6 +31,7 @@ def login():
         if user:
             if check_password_hash(user.password, form.password.data):
                 login_user(user, remember=form.remember.data)
+                flash("user logged in!")
                 return redirect('/home')
         return "wrong again bitch"
         # return "<p>%s</p><p>%s</p>" % (form.username.data, form.password.data)
@@ -53,7 +54,7 @@ def signup():
         )
         db.session.add(new_user)
         db.session.commit()
-
+        flash("user created!")
         return redirect('/login')
         # return  "<p>%s</p><p>%s</p><p>%s</p>" % (form.email.data, form.username.data, form.password.data)
     return render_template('signup.html', form=form)
@@ -62,4 +63,5 @@ def signup():
 @login_required
 def logout():
     logout_user()
+    flash("user logged out!")
     return redirect('/')
