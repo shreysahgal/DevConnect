@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, Markup
 
 from devconnect.home import bp
-from devconnect.models import Post
+from devconnect.models import Post, db, Comment, User
 from config import Config
 
 @bp.route('/')
