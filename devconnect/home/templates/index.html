@@ -8,24 +8,26 @@
 
 {% block content %}
 <h1 class="text-center">Home Page!!!!!</h1>
-<p>Filter type of post:
-<form id="typefilterform" onchange="filterType();">
+
+<label for="type">Filter type of post:</label>
+<form id="typefilterform" oninput="filterType();">
     <select form="typefilterform" id="type">
         <option value="">No filter</option>
         <option value="i">Ideas</option>
         <option value="qa">Q/A</option>
         <option value="u">Update</option>
     </select>
+    <br>
+    <label for="author">Filter by username:</label>
+    <input type="search" form="typefilterform" id="author">
 </form>
-</p>
-<p>Current filter: </p>
 
 <ul>
     {% for post in posts %}
     <!-- <li> -->
     <!--Draw post-->
     <div class="container" style="width:70%">
-        <div class="row" id="postType_{{ loop.index0 }}">
+        <div class="row" id="postType_{{ loop.index0 }}" style="font-style: italic;">
             {% if post.kind == 'i' %}
             <i>idea</i>
             {% elif post.kind == 'qa' %}
@@ -37,9 +39,9 @@
         <div class="row">
             <a href="/post/{{ post.id }}">
                 <h3 style="display: inline;" id="postTitle_{{ loop.index0 }}">{{ post.title }}</h3>
-            </a> by <p style="display: inline;" id="postAuthor_{{ loop.index0 }}"><a
-                    href="/user/{{post.author.username}}">{{ post.author.username }}
-                </a></p>
+            </a> by <a href="/user/{{post.author.username}}">
+                <p style="display: inline;" id="postAuthor_{{ loop.index0 }}">{{ post.author.username }}</p>
+            </a>
         </div>
         <div class="row" id="postDescrip_{{ loop.index0 }}">
             <p>{{ post.descrip }}</p>

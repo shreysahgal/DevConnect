@@ -1,13 +1,16 @@
 // called when a filter for post type is chosen
 function filterType() {
-    var form = document.getElementById('type');
-    console.log(form.value);
+    var type = document.getElementById('type');
+    var author = document.getElementById('author');
+    console.log(type.value);
+    console.log(author.value);
     // get filtered posts
     $.ajax({
-        url: "/filter/" + form.value,
+        url: "/filter/" + type.value + "," + author.value,
         type: 'POST',
         data: {
-            facet: form.value
+            type: type.value,
+            author: author.value
         },
         dataType: "text",
         success: function (response) {
