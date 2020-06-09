@@ -1,16 +1,18 @@
 // called when a filter for post type is chosen
 function filterType() {
     var type = document.getElementById('type');
-    var author = document.getElementById('author');
     console.log(type.value);
-    console.log(author.value);
     // get filtered posts
+    // to add more filters:
+    // 1. make a form part for it in the html
+    // 2. get its value here
+    // 3. add it below to the url, separated by a comma
+    // 4. add a query for it in routes.py
     $.ajax({
-        url: "/filter/" + type.value + "," + author.value,
+        url: "/filter/" + type.value + ",",
         type: 'POST',
         data: {
-            type: type.value,
-            author: author.value
+            type: type.value
         },
         dataType: "text",
         success: function (response) {
@@ -24,7 +26,7 @@ function filterType() {
 
 // to show posts to html
 function showPosts(postJSON) {
-    posts = JSON.parse(postJSON).posts
+    posts = JSON.parse(postJSON).posts;
     for (let i = 0; i < posts.length; i++) {
         document.getElementById("postType_" + i).innerHTML = convertPostKind(posts[i].kind);
         document.getElementById("postTitle_" + i).innerHTML = posts[i].title;

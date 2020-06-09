@@ -1,12 +1,8 @@
-from flask import Flask, render_template, jsonify, request
-
-from sqlalchemy.sql import text
+from flask import render_template
 
 from devconnect.home import bp
 from devconnect.models import User, Post
-from config import Config
 
-import json
 
 # maybe this can even route to /filter/, since with no facet it just does 10 recent results
 
@@ -27,24 +23,28 @@ def index():
 def filter(facets=""):
     filters = facets.split(",")
     typefilter = filters[0]
-    authorfilter = filters[1]
-    # get user id with this name (not sure if necessary, but couldnt find a workaround, maybe im big dumb)
-    # also seems VERY dangerous to directly get id on same call as query but oh well we live life on the edge
-    author = User.query.filter(User.username == authorfilter).limit(1)
-    if author.count() > 0:
-        authorid = author[0].id
-    else:
-        authorid = ""
     if (typefilter == ""):
         posts = Post.query.order_by('created')
     else:
         posts = Post.query.filter(
             Post.kind == typefilter).order_by('created')
-    if (authorid != ""):
-        posts = posts.filter(
-            Post.author_id == authorid).order_by('created')
     response = {"posts": []}
     serialized_posts = response["posts"]
     for p in posts.limit(10).all():
         serialized_posts.append(p.serialize())
     return response
+
+
+@bp.route('/search/<searchterms>')
+def search(searchterms):
+    # for now, just search for anything that exactly matches the search terms, but eventually
+    # terms were separated by commas in javascript, so we separate them here
+    terms = searchterms.split(",")
+    print(terms)
+    # get users
+    users = User.query.filter(
+        User.username.in_(terms)).order_by('created').limit(10).all()
+    # get posts
+    posts = Post.query.filter(
+        Post.title.in_(terms)).order_by('created').limit(10).all()
+    return render_template("search.html", users=users, posts=posts)

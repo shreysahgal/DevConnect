@@ -6,6 +6,28 @@
 <script src="{{ url_for('home.static', filename='script.js') }}"></script>
 {% endblock %}
 
+{% block search %}
+<ul class="nav navbar-nav">
+    <li class="nav-item">
+        <form id="searchform">
+            <input form="searchform" type="search" placeholder="Search posts, users, etc:" id="search">
+            <button form="searchform" type="submit">Search</button>
+        </form>
+    </li>
+</ul>
+<script type="text/javascript">
+    document.getElementById("searchform").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var searchterms = document.getElementById("search").value;
+        // if there are spaces, replace with commas so that they can safely be transferred to route
+        searchterms = searchterms.replace(/\s/, ",");
+        // use flask routes to search in python
+        window.location.replace(window.location.origin + "/search/" + searchterms);
+        return false;
+    });
+</script>
+{% endblock %}
+
 {% block content %}
 <h1 class="text-center">Home Page!!!!!</h1>
 
@@ -17,9 +39,6 @@
         <option value="qa">Q/A</option>
         <option value="u">Update</option>
     </select>
-    <br>
-    <label for="author">Filter by username:</label>
-    <input type="search" form="typefilterform" id="author">
 </form>
 
 <ul>
