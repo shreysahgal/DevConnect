@@ -5,14 +5,22 @@ Sign Up
 {% endblock %}
 
 {% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
 <div class="row">
     <div class="container" style="width: 50%">
         <h3>{{ user.username}}</h3>
         <p>is a {{ is_a }}</p>
         <div class="row">
             <p>
-                Posts:
-                {% for post in posts %}
+            Posts:
+            {% for post in posts %}
                 <!--Draw post-->
             <div class="row">
                 {% if post.kind == 'i' %}
@@ -36,11 +44,32 @@ Sign Up
             </p>
         </div>
     </div>
-    {% if edit: %}
+    <div class = "container">
+    <p>{{user.followers.count()}} followers, {{user.followed.count()}} following</p>
+    {% if current_user.is_authenticated %}
+    {% if user == current_user %}
     <div class="column-12" style="width: 50%">
         <a href="{{url_for('profile.edit_profile')}}"><button type="button" class="btn btn-primary">Edit Your
                 Profile</button></a>
     </div>
+    <h1>Followers</h1>
+    {% elif not current_user.is_following(user) %}
+    <p> 
+        <form action ="{{url_for('profile.follow', username=user.username) }}" method = "POST">
+            {{followForm.hidden_tag()}}
+            {{followForm.submit(value="Follow")}}
+        </form>
+    </p>
+    {% else %}
+    <p> 
+        <form action ="{{url_for('profile.unfollow', username=user.username) }}" method = "POST">
+            {{followForm.hidden_tag()}}
+            {{followForm.submit(value="Unfollow")}}
+        </form>
+    </p>
+    {% endif %}
+    {% endif %}
 </div>
-{% endif %}
+
+</div>
 {% endblock %}

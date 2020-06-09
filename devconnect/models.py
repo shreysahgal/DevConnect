@@ -9,6 +9,11 @@ assoc_table = db.Table('assoc',
     db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
 )
 
+followers = db.Table('followers', 
+    db.Column('follower_id', db.Integer, db.ForeignKey('users.id')), 
+    db.Column('followed_id', db.Integer, db.ForeignKey('users.id'))
+)
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -20,6 +25,25 @@ class User(UserMixin, db.Model):
     # implicit "tags" field here because of many-to-many relationship
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
+
+    followed = db.relationship('User', secondary=followers, primaryjoin=(followers.c.follower_id == id), secondaryjoin = (followers.c.followed_id == id), backref = db.backref('followers', lazy = 'dynamic'), lazy='dynamic')
+
+    #helper functions for following 
+    def follow(self, user): 
+        if not self.is_following(user): 
+            self.followed.append(user)
+    
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
+    
+    def is_following(self, user): 
+        return self.followed.filter(followers.c.followed_id == user.id).count() > 0
+    
+    def followed_posts(self): 
+        followed = Post.query.join(followers, (followers.c.followed_id == Post.user_id)).filter(followers.c.follower_id == self.id).order_by(Post.timestamp.desc())
+        own = Post.query.filter_by(user_id=self.id)
+        return followed.union(own).order_by(Post.timestamp.desc())
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -46,6 +70,7 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     users = db.relationship('User', secondary=assoc_table, backref=db.backref('tags', lazy='dynamic'), lazy='dynamic')
+
 
 if __name__ == '__main__':
     user = User(email="email", username="username", password="password")
