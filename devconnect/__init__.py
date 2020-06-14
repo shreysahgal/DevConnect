@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 
-from devconnect.models import User, Post, Tag, db
+from devconnect.models import User, Post, Tag, Comment, db
 from config import Config
 from devconnect.fake import users, posts, comments
 from sqlalchemy.exc import IntegrityError

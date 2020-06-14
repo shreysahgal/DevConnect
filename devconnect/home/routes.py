@@ -1,21 +1,18 @@
-from flask import render_template
+from flask import render_template, request, Markup
 
 from devconnect.home import bp
-from devconnect.models import User, Post
-
-
+from devconnect.models import Post, User
 # maybe this can even route to /filter/, since with no facet it just does 10 recent results
 
 
 @bp.route('/')
 @bp.route('/home/')
 def index():
-    # get 10 most recent posts
-    posts = Post.query.order_by('created').limit(10)
-    return render_template('index.html', posts=posts)
-
-# facets are done in specific order (hard coded)
-# 1. type, 2. author
+    page = request.args.get('page', 1, type=int)
+    pagination = Post.query.order_by('created').paginate(
+        page, per_page=10, error_out=False)
+    posts = pagination.items
+    return render_template('index.html', posts=posts, pagination=pagination, Markup=Markup)
 
 
 @bp.route('/filter/', methods=['POST'])

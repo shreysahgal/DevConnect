@@ -29,6 +29,15 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+</div>
 <h1 class="text-center">Home Page!!!!!</h1>
 
 <label for="type">Filter type of post:</label>
@@ -57,17 +66,52 @@
         </div>
         <div class="row">
             <a href="/post/{{ post.id }}">
-                <h3 style="display: inline;" id="postTitle_{{ loop.index0 }}">{{ post.title }}</h3>
+                <h3 style="display: inline;" id="postTitle_{{ loop.index0 }}">{{ Markup(post.title) }}</h3>
             </a> by <a href="/user/{{post.author.username}}">
-                <p style="display: inline;" id="postAuthor_{{ loop.index0 }}">{{ post.author.username }}</p>
+                <p style="display: inline;" id="postAuthor_{{ loop.index0 }}">{{ Markup(post.author.username) }}</p>
             </a>
         </div>
         <div class="row" id="postDescrip_{{ loop.index0 }}">
-            <p>{{ post.descrip }}</p>
+            <p>{{ Markup(post.descrip) }}</p>
         </div>
         <br>
     </div>
     <!-- </li> -->
     {% endfor %}
 </ul>
+
+<div class="container">
+    <div class="row text-center">
+        <ul class="pagination justify-content-center">
+            <li {% if not pagination.has_prev %} class="disabled" {% endif %}>
+                <a
+                    href="{% if pagination.has_prev %}{{url_for('home.index', page=pagination.page-1)}}{% else %}#{% endif %}">
+                    &laquo;
+                </a>
+            </li>
+            {% for p in pagination.iter_pages() %}
+            {% if p %}
+            {% if p == pagination.page %}
+            <li class="active">
+                <a href="{{ url_for('home.index', page = p) }}">{{ p }}</a>
+            </li>
+            {% else %}
+            <li>
+                <a href="{{ url_for('home.index', page = p) }}">{{ p }}</a>
+            </li>
+            {% endif %}
+            {% else %}
+            <li class="disabled"><a href="#">&hellip;</a></li>
+            {% endif %}
+            {% endfor %}
+            <li {% if not pagination.has_next %} class="disabled" {% endif %}>
+                <a
+                    href="{% if pagination.has_next %}{{url_for('home.index', page=pagination.page+1)}}{% else %}#{% endif %}">
+                    &raquo;
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 {% endblock %}
