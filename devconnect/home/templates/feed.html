@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+</div>
+<h1 class="text-center">Feed</h1>
+<ul>
+    {% for post in posts %}
+    <!-- <li> -->
+    <!--Draw post-->
+    <div class="container" style="width:70%">
+        <div class="row">
+            {% if post.kind == 'i' %}
+            <i>idea</i>
+            {% elif post.kind == 'qa' %}
+            <i>q/a</i>
+            {% elif post.kind == 'u' %}
+            <i>update</i>
+            {% endif %} 
+        </div>
+        <div class="row">
+            <a href="/post/{{post.id}}/{{ post.slug }}">
+                <h3 style="display: inline">{{ post.title }}</h3>
+            </a> by <a href="/user/{{post.author.username}}">{{ post.author.username }} </a>
+        </div>
+        <div class="row">
+            <p>{{ post.descrip }}</p>
+        </div>
+        <br>
+    </div>
+    <!-- </li> -->
+    {% endfor %}
+</ul>
+
+{% endblock %}
