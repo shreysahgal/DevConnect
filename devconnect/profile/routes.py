@@ -20,13 +20,14 @@ def view_user(username):
         return render_template('displayuser.html', user=user, is_a=is_a, posts=posts, followForm=followForm, Markup=Markup)
     return "user doesn't exist"
 
-@bp.route('/edit_profile', methods = ['GET', 'POST'])
+
+@bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
-def edit_profile(): 
+def edit_profile():
     form = EditProfileForm()
-    if form.validate_on_submit(): 
+    if form.validate_on_submit():
         current_user.username = form.username.data
-        db.session.commit() 
+        db.session.commit()
         return redirect(url_for('profile.view_user', username=current_user.username))
     elif request.method == 'GET':
         form.username.data = current_user.username

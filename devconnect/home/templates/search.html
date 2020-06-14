@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('home.static', filename='script.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Search Results</h1>
+
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a href="#1" data-toggle="tab">Posts</a>
+    </li>
+    <li><a href="#2" data-toggle="tab">Users</a>
+    </li>
+</ul>
+<div class="tab-content ">
+    <div class="tab-pane active" id="1">
+        <ul>
+            {% for post in posts %}
+            <!-- <li> -->
+            <!--Draw post-->
+            <div class="container" style="width:70%">
+                <div class="row" id="postType_{{ loop.index0 }}" style="font-style: italic;">
+                    {% if post.kind == 'i' %}
+                    <i>idea</i>
+                    {% elif post.kind == 'qa' %}
+                    <i>q/a</i>
+                    {% elif post.kind == 'u' %}
+                    <i>update</i>
+                    {% endif %}
+                </div>
+                <div class="row">
+                    <a href="/post/{{ post.id }}">
+                        <h3 style="display: inline;" id="postTitle_{{ loop.index0 }}">{{ post.title }}</h3>
+                    </a> by <a href="/user/{{post.author.username}}">
+                        <p style="display: inline;" id="postAuthor_{{ loop.index0 }}">{{ post.author.username }}</p>
+                    </a>
+                </div>
+                <div class="row" id="postDescrip_{{ loop.index0 }}">
+                    <p>{{ post.descrip }}</p>
+                </div>
+                <br>
+            </div>
+            <!-- </li> -->
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="tab-pane" id="2">
+        <ul>
+            {% for user in users %}
+            <!-- <li> -->
+            <!--Print username, for now-->
+            <div class="container" style="width:70%">
+                <a href="/user/{{user.username}}">
+                    <p style="display: inline;" id="userAuthor_{{ loop.index0 }}">{{ user.username }}</p>
+            </div>
+            <!-- </li> -->
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<!-- 
+
+<label for="type">Filter type of post:</label>
+<form id="typefilterform" oninput="filterType();">
+    <select form="typefilterform" id="type">
+        <option value="">No filter</option>
+        <option value="i">Ideas</option>
+        <option value="qa">Q/A</option>
+        <option value="u">Update</option>
+    </select>
+</form> -->
+
+
+{% endblock %}

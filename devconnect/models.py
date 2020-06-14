@@ -5,9 +5,12 @@ from flask_login import UserMixin
 db = SQLAlchemy()
 
 assoc_table = db.Table('assoc',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
-)
+                       db.Column('user_id', db.Integer,
+                                 db.ForeignKey('users.id')),
+                       db.Column('tag_id', db.Integer,
+                                 db.ForeignKey('tags.id'))
+                       )
+
 
 followers = db.Table('followers', 
     db.Column('follower_id', db.Integer, db.ForeignKey('users.id')), 
@@ -56,6 +59,17 @@ class Post(db.Model):
     slug = db.Column(db.String(25))
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'created': self.created.strftime("%m/%d/%Y, %H:%M:%S"),
+            'kind': self.kind,
+            'author': self.author.username,
+            'title': self.title,
+            'descrip': self.descrip
+        }
+
+
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
@@ -71,7 +85,9 @@ class Tag(db.Model):
     __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
-    users = db.relationship('User', secondary=assoc_table, backref=db.backref('tags', lazy='dynamic'), lazy='dynamic')
+    users = db.relationship('User', secondary=assoc_table, backref=db.backref(
+        'tags', lazy='dynamic'), lazy='dynamic')
+
 
 
 if __name__ == '__main__':

@@ -1,6 +1,32 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('home.static', filename='script.js') }}"></script>
+{% endblock %}
+
+{% block search %}
+<ul class="nav navbar-nav">
+    <li class="nav-item">
+        <form id="searchform">
+            <input form="searchform" type="search" placeholder="Search posts, users, etc:" id="search">
+            <button form="searchform" type="submit">Search</button>
+        </form>
+    </li>
+</ul>
+<script type="text/javascript">
+    document.getElementById("searchform").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var searchterms = document.getElementById("search").value;
+        // if there are spaces, replace with commas so that they can safely be transferred to route
+        searchterms = searchterms.replace(/\s/, ",");
+        // use flask routes to search in python
+        window.location.replace(window.location.origin + "/search/" + searchterms);
+        return false;
+    });
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -13,12 +39,23 @@
 
 </div>
 <h1 class="text-center">Home Page!!!!!</h1>
+
+<label for="type">Filter type of post:</label>
+<form id="typefilterform" oninput="filterType();">
+    <select form="typefilterform" id="type">
+        <option value="">No filter</option>
+        <option value="i">Ideas</option>
+        <option value="qa">Q/A</option>
+        <option value="u">Update</option>
+    </select>
+</form>
+
 <ul>
     {% for post in posts %}
     <!-- <li> -->
     <!--Draw post-->
     <div class="container" style="width:70%">
-        <div class="row">
+        <div class="row" id="postType_{{ loop.index0 }}" style="font-style: italic;">
             {% if post.kind == 'i' %}
             <i>idea</i>
             {% elif post.kind == 'qa' %}
@@ -29,10 +66,12 @@
         </div>
         <div class="row">
             <a href="/post/{{post.id}}/{{ post.slug }}">
-                <h3 style="display: inline">{{ post.title }}</h3>
-            </a> by <a href="/user/{{post.author.username}}">{{ post.author.username }} </a>
+                <h3 style="display: inline;" id="postTitle_{{ loop.index0 }}">{{ post.title }}</h3>
+            </a> by <a href="/user/{{post.author.username}}">
+                <p style="display: inline;" id="postAuthor_{{ loop.index0 }}">{{ post.author.username}}</p>
+            </a>
         </div>
-        <div class="row">
+        <div class="row" id="postDescrip_{{ loop.index0 }}">
             <p>{{ Markup(post.descrip) }}</p>
         </div>
         <br>
@@ -41,31 +80,38 @@
     {% endfor %}
 </ul>
 
-<ul class = "pagination"> 
-    <li {% if not pagination.has_prev %} class = "disabled" {% endif %}> 
-        <a href = "{% if pagination.has_prev %}{{url_for('home.index', page=pagination.page-1)}}{% else %}#{% endif %}">
-            &laquo;
-        </a>    
-    </li>
-    {% for p in pagination.iter_pages() %}
-        {% if p %}
+<div class="container">
+    <div class="row text-center">
+        <ul class="pagination justify-content-center">
+            <li {% if not pagination.has_prev %} class="disabled" {% endif %}>
+                <a
+                    href="{% if pagination.has_prev %}{{url_for('home.index', page=pagination.page-1)}}{% else %}#{% endif %}">
+                    &laquo;
+                </a>
+            </li>
+            {% for p in pagination.iter_pages() %}
+            {% if p %}
             {% if p == pagination.page %}
-            <li class = "active">
-                <a href = "{{ url_for('home.index', page = p) }}">{{ p }}</a>
+            <li class="active">
+                <a href="{{ url_for('home.index', page = p) }}">{{ p }}</a>
             </li>
             {% else %}
             <li>
-                <a href = "{{ url_for('home.index', page = p) }}">{{ p }}</a>
+                <a href="{{ url_for('home.index', page = p) }}">{{ p }}</a>
             </li>
             {% endif %}
-        {% else %}
-        <li class ="disabled"><a href = "#">&hellip;</a></li>
-        {% endif %}
-    {% endfor %}
-    <li {% if not pagination.has_next %} class = "disabled" {% endif %}> 
-        <a href = "{% if pagination.has_next %}{{url_for('home.index', page=pagination.page+1)}}{% else %}#{% endif %}">
-            &raquo;
-        </a>    
-    </li>
-</ul>
+            {% else %}
+            <li class="disabled"><a href="#">&hellip;</a></li>
+            {% endif %}
+            {% endfor %}
+            <li {% if not pagination.has_next %} class="disabled" {% endif %}>
+                <a
+                    href="{% if pagination.has_next %}{{url_for('home.index', page=pagination.page+1)}}{% else %}#{% endif %}">
+                    &raquo;
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 {% endblock %}
