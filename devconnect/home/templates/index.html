@@ -66,9 +66,9 @@
         </div>
         <div class="row">
             <a href="/post/{{ post.id }}">
-                <h3 style="display: inline;" id="postTitle_{{ loop.index0 }}">{{ Markup(post.title) }}</h3>
+                <h3 style="display: inline;" id="postTitle_{{ loop.index0 }}">{{ post.title }}</h3>
             </a> by <a href="/user/{{post.author.username}}">
-                <p style="display: inline;" id="postAuthor_{{ loop.index0 }}">{{ Markup(post.author.username) }}</p>
+                <p style="display: inline;" id="postAuthor_{{ loop.index0 }}">{{ post.author.username }}</p>
             </a>
         </div>
         <div class="row" id="postDescrip_{{ loop.index0 }}">
