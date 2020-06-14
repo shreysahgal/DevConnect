@@ -42,18 +42,17 @@ def add_tags():
     except IntegrityError:
         db.session.rollback()
 
-# # comment out when not reinstantiating the databases
-# with app.app_context():
+# comment out when not reinstantiating the databases
+with app.app_context():
 
-#     db.create_all()
-#     db.create_all()
+    db.create_all()
     
-#     add_admin()
-#     add_tags()
+    add_admin()
+    add_tags()
 
-#     users(50)
-#     posts(50)
-#     comments(50)
+    users(50)
+    posts(50)
+    comments(50)
 
 
 login_manager = LoginManager()
