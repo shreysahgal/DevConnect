@@ -17,7 +17,7 @@ view post
         <h4>Comments</h3>
         <ul class="list-group">
             <li class="list-group-item  flex-column" style="border: none;">
-                <form style="width:auto;" method="POST" action="/post/{{ post.id }}">
+                <form style="width:auto;" method="POST" action="/post/{{post.id}}/{{ post.slug }}">
                     {{ commentform.hidden_tag() }}
                     {{ wtf.form_field(commentform.body) }}
                     {{ wtf.form_field(commentform.submit) }}
@@ -52,5 +52,13 @@ view post
             {% endif %}
         {% endfor %}
     </div>
+
+    <br><br>
+
+    <form method="POST" action="/post/{{post.id}}/{{ post.slug }}">
+        {{ commentform.hidden_tag() }}
+        {{ wtf.form_field(commentform.body) }}
+        <button class="btn btn-primary" type="submit">comment</button>
+    </form>
 </div>
 {% endblock %}

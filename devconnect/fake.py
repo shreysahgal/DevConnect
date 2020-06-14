@@ -2,6 +2,7 @@ from random import randint, sample
 from sqlalchemy.exc import IntegrityError
 from faker import Faker
 from devconnect.models import User, Post, Tag, Comment, db
+from slugify import slugify
 
 def users(count=20):
     fake = Faker()
@@ -34,11 +35,13 @@ def posts(count=20):
         kind = ['Idea', 'Q&A', 'Update'][randint(0,2)]
         title = ' '.join(fake.words())
         descrip = ' '.join(fake.sentences())
+        slug = slugify(title)
         p = Post(
             kind=kind,
             author=u,
             title=title,
-            descrip=descrip
+            descrip=descrip,
+            slug=slug
         )
         db.session.add(p)
     db.session.commit()

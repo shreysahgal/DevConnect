@@ -7,11 +7,12 @@ from config import Config
 from devconnect.view_post import bp
 from devconnect.view_post.forms import CommentForm, ReplyForm
 
-@bp.route('/post/<postid>', methods=['GET', 'POST'])
+@bp.route('/post/<postid>/<slug>', methods=['GET', 'POST'])
 @login_required
-def view_post(postid):
+def view_post(postid,slug):
     commentform = CommentForm()
     replyform = ReplyForm()
+
 
     if commentform.validate_on_submit():
         new_comment = Comment(
@@ -23,7 +24,7 @@ def view_post(postid):
         db.session.add(new_comment)
         db.session.commit()
 
-        return redirect('/post/'+postid)
+        return redirect('/post/'+postid+"/"+slug)
 
     if replyform.submit.data:
         parent = Comment.query.get(replyform.parentid.data)
@@ -37,8 +38,8 @@ def view_post(postid):
         db.session.add(new_subcom)
         db.session.commit()
 
-        return redirect('/post/'+postid)
+        return redirect('/post/'+postid+"/"+slug)
 
     post = Post.query.get(postid)
     
-    return render_template('post.html', post=post, commentform=commentform, replyform=replyform)
+    return render_template('post.html', post=post, commentform=commentform, replyform=replyform, Markup=Markup)

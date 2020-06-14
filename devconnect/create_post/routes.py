@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, flash
 from flask_wtf import FlaskForm
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_required, current_user
+from slugify import slugify
 
 from devconnect.models import Post, db
 from devconnect.create_post import bp
@@ -18,11 +19,13 @@ def create_post():
         kind = form.kind.data
         title = form.title.data
         descrip = form.descrip.data
+        slug = slugify(form.title.data)
         new_post = Post(
             kind=kind,
             author=current_user,
             title=title,
-            descrip=descrip
+            descrip=descrip, 
+            slug=slug
         )
         db.session.add(new_post)
         db.session.commit() 
