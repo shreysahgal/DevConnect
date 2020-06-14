@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 
-from devconnect.models import User, Post, Tag, db
+from devconnect.models import User, Post, Tag, Comment, db
 from config import Config
 from devconnect.fake import users, posts, comments
 from sqlalchemy.exc import IntegrityError
@@ -46,14 +46,13 @@ def add_tags():
 with app.app_context():
 
     db.create_all()
-    db.create_all()
-    
+    db.create_all()    
     add_admin()
     add_tags()
 
-    users(50)
-    posts(50)
-    comments(50)
+    users(10)
+    posts(10)
+    comments(10)
 
 
 login_manager = LoginManager()

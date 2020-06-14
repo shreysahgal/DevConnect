@@ -63,6 +63,8 @@ class Comment(db.Model):
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    parent_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
+    children = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]))
 
 
 class Tag(db.Model):

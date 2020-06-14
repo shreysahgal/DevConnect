@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, Markup
 from flask_wtf import FlaskForm
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_required, current_user
@@ -17,7 +17,7 @@ def view_user(username):
         is_a = ' & '.join([t.name for t in user.tags])
         posts = Post.query.filter(Post.author == user)   
         followForm = FollowForm()
-        return render_template('displayuser.html', user=user, is_a=is_a, posts=posts, followForm=followForm)
+        return render_template('displayuser.html', user=user, is_a=is_a, posts=posts, followForm=followForm, Markup=Markup)
     return "user doesn't exist"
 
 @bp.route('/edit_profile', methods = ['GET', 'POST'])
